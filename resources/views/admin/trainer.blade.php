@@ -1,18 +1,23 @@
-<?php echo view('admin/head'); ?>
+@include('admin/head')
+<style>
+    td {
+        vertical-align: center;
+    }
+</style>
 <table class="table table-hover">
     <thead>
     <tr>
+        <th style="width: 60px"></th>
         <th>Name</th>
         <th>Bearbeiten</th>
         <th>Löschen</th>
     </tr>
     </thead>
     <tbody>
-    <?php
-    foreach($trainers as $trainer){
-    ?>
+    @foreach($trainers as $trainer)
     <tr>
-        <td><?php echo $trainer->name; ?></td>
+        <td id="phototd" style="width: 80px"><img src="{{ asset('images') . '/' . $trainer->photo }}" class="img-circle img-responsive" style="height: 60px;"></td>
+        <td> {{ $trainer->name }}</td>
         <td>
             <a class="btn btn-small btn-info btn-xs" href="{{ URL::to('admin/trainer/' . $trainer->id . '/edit') }}">Bearbeiten</a>
         </td>
@@ -23,10 +28,7 @@
             {{ Form::close() }}
         </td>
     </tr>
-    <?php
-    }
-
-    ?>
+@endforeach
     </tbody>
 </table>
 <col-md-2></col-md-2>
@@ -35,4 +37,24 @@
 </col-md-8>
 <col-md-2></col-md-2>
 
-<?php echo view('admin/foot'); ?>
+<script>
+    $(function(){
+        $('.img-circle').mouseenter(function(){
+            $('.img-circle').css('cursor', '-webkit-zoom-in');
+        });
+        $('.img-circle').click(function () {
+            if ($(this).css('height') == "60px"){
+                $('#phototd').css('width', '210px');
+                $(this).css('height', '200px');
+                $(this).css('cursor', '-webkit-zoom-out');
+            }
+            else {
+                $('#phototd').css('width', '80px');
+                $(this).css('height', '60px');
+                $(this).css('cursor', '-webkit-zoom-in');
+            }
+        });
+    });
+</script>
+
+@include('admin/foot')

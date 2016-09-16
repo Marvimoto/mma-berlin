@@ -11,6 +11,11 @@
     <link rel="stylesheet" href="{{ URL::asset('css/bootstrap.css') }}">
     <link rel="stylesheet" href="{{ URL::asset('css/jquery-ui.css') }}">
     <link rel="stylesheet" href="{{ URL::asset('css/timepicki.css') }}">
+    <script src="{{ asset('js/jquery-2.2.3.min.js') }}"></script>
+    <script src="{{ asset('js/jquery-ui.min.js') }}"></script>
+    <script src="{{ asset('js/timepicki.js')}}"></script>
+    <script src="{{ asset('js/isotope.pkgd.min-2.js') }}"></script>
+    <script src="{{ asset('js/bootstrap.min.js') }}"></script>
     <style>body {
             padding-top: 70px;
         }</style>
@@ -36,7 +41,6 @@
                         <li><a href="{{url('admin/stundenplaene')}}">Stundenpläne</a></li>
                         <li><a href="{{url('admin/trainer')}}">Trainer</a></li>
                         <li><a href="{{url('admin/kurse')}}">Kurse</a></li>
-                        <li><a href="{{url('admin/stundenplaene')}}">Stundenplanversionen</a></li>
                     </ul>
                 </li>
                 <li class="dropdown">
@@ -46,7 +50,6 @@
                         <li><a href="{{url('admin/turniere')}}">Turniere</a></li>
                         <li><a href="{{url('admin/gyms')}}">Gyms</a></li>
                         <li><a href="{{url('admin/fighters')}}">Kämpfer</a></li>
-                        <li><a href="{{url('admin/stundenplaene')}}">Stundenplanversionen</a></li>
                     </ul>
                 </li>
             </ul>

@@ -21,6 +21,7 @@ Route::get('preise', 'ContentController@preise');
 Route::get('training', 'ContentController@training');
 Route::get('stundenplan', 'ContentController@stundenplan');
 Route::get('team', 'ContentController@team');
+Route::get('impressum', 'ContentController@impressum');
 Route::get('logout', 'AdminController@logout');
 
 /*
@@ -49,9 +50,9 @@ Route::group(['middleware' => 'web'], function () {
     Route::get('auth/register', 'Auth\AuthController@getRegister');
     Route::post('auth/register', 'Auth\AuthController@postRegister');
 
-    Route::get('admin/stundenplan', 'AdminController@stundenplanDashboard');
+    Route::get('admin/dashboard', 'AdminController@dashboard');
     Route::get('admin/', function () {
-        return redirect('admin/stundenplan');
+        return redirect('admin/dashboard');
     });
 
     //Stundenplan routes

@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
     <title>MMA Berlin</title>
 
     <!-- Bootstrap -->
-    <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.6/flatly/bootstrap.min.css" rel="stylesheet" integrity="sha384-XYCjB+hFAjSbgf9yKUgbysEjaVLOXhCgATTEBpCqT1R3jvG5LGRAK5ZIyRbH5vpX" crossorigin="anonymous">
+    <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
     <style>body { padding-top: 70px; }</style>
 </head>
 
@@ -40,10 +40,11 @@ use Illuminate\Support\Facades\Auth;
                 <li><a href="{{url('kontakt')}}">Kontakt</a></li>
                 <li><a href="{{url('kontakt')}}">Turniere</a></li>
                 <li><a href="/">Blog</a></li>
+                <li><a href="{{url('impressum')}}">Impressum</a></li>
             </ul>
-            <?php if (Auth::check()){ ?>
+            @if (Auth::check())
             <ul class="navbar-nav nav navbar-right"><li><a href="{{url('admin/stundenplan')}}">Admin Dashboard</a></li></ul>
-            <?php } ?>
+            @endif
         </div>
     </div>
 </nav>

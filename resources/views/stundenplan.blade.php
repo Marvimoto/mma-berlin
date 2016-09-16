@@ -1,5 +1,6 @@
-<?php echo view('head'); ?>
+@include('head')
 <div class="row">
+    @if (isset($stundenplan))
     <button class="btn btn-link" id="filterButton" type="button" data-toggle="collapse" data-target="#collapseFilter"
             aria-expanded="false" aria-controls="collapseFilter" style="font-size: 1.25em">
         <span class="glyphicon glyphicon-chevron-down"></span> Filter
@@ -8,17 +9,19 @@
         <div class="col-md-3">
             <h4>Kurse anzeigen:</h4>
             <div class="checkbox" id="radiokurse">
-                <?php foreach($kurse as $kurs){
-                $string = str_replace(' ', '', $kurs->name);
-                $string = preg_replace('/[^a-z0-9 ]/i', '', $string);
-                $string = strtolower($string);
-                ?>
+                @foreach($kurse as $kurs)
+                    <?php
+                    $string = str_replace(' ', '', $kurs->name);
+                    $string = preg_replace('/[^a-z0-9 ]/i', '', $string);
+                    $string = strtolower($string);
+                    ?>
 
-                <label>
-                    <input class="kurse" type="checkbox" value="{{ $string }}" checked>
-                    {{ $kurs->name }}
-                </label>
-                <?php } ?>
+
+                    <label>
+                        <input class="kurse btn btn-sm" type="checkbox" value="{{ str_slug($kurs->name, '') }}" checked>
+                        {{ $kurs->name }}
+                    </label>
+                @endforeach
             </div>
             <button class="btn btn-sm btn-primary" id="allekurse">Alle</button>
             <button class="btn btn-sm btn-primary" id="keinekurse">Keine</button>
@@ -31,49 +34,61 @@
             <table style="width: 100%" class="table table-bordered">
                 <thead>
                 <tr>
-                <th>Montag</th>
-                <th>Dienstag</th>
-                <th>Mittwoch</th>
-                <th>Donnerstag</th>
-                <th>Freitag</th>
-                <th>Samstag</th>
-                <th>Sonntag</th>
+                    <th>Montag</th>
+                    <th>Dienstag</th>
+                    <th>Mittwoch</th>
+                    <th>Donnerstag</th>
+                    <th>Freitag</th>
+                    <th>Samstag</th>
+                    <th>Sonntag</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr style="vertical-align: top">
-
-                    <?php
-                    $day = 0;
-                    foreach ($stundenplan as $item) {
-                        if ($item->tag_id > $day) {
-                            if ($day != 0) {
-                                echo("</div></td>");
-                            }
-                            $day++;
-                            echo("<td style='width:14.3%'><div class='grid'>");
-                        }
-                        $string = str_replace(' ', '', $item->kurs->name);
-                        $string = preg_replace('/[^a-z0-9 ]/i', '', $string);
-                        $string = strtolower($string);
-                        $item->begins_at = date('H:i', strtotime($item->begins_at));
-                        $item->ends_at = date('H:i', strtotime($item->ends_at));
-                        echo("<div data-kurzname = '" . $string . "' class='grid-item " . $string . "'><h4 class='kursname'>" . $item->kurs->name . "</h4><div style='font-size: 0.75em'>" . $item->trainer->name . "</div><div class='uhrzeit' style='font-size: 0.75em'>" . $item->begins_at . " - " . $item->ends_at . "</div><div style='font-size: 0.75em'>" . $item->alter . "</div>");
-                        ?>
-
                 <?php
-                        echo("</div>");
-                    }
-                    ?>
+            $day = 0;
+            ?>
+                @foreach ($stundenplan as $item)
+                    @if ($item->tag_id > $day)
+                        @if ($day != 0)
+        </div>
+        </td>
+        @endif
+        <?php
+        $day++
+        ?>
+        <td style='width:14.3%'>
+            <div class='grid'>
+                @endif
+                <?php
+                $string = str_replace(' ', '', $item->kurs->name);
+                $string = preg_replace('/[^a-z0-9 ]/i', '', $string);
+                $string = strtolower($string);
+                $item->begins_at = date('H:i', strtotime($item->begins_at));
+                $item->ends_at = date('H:i', strtotime($item->ends_at)) ;
+                ?>
+                <div data-kurzname="{{ $string }}" class='grid-item {{ $string }}'><h4
+                            class='kursname'>{{$item->kurs->name }}</h4>
+                    <div style='font-size: 0.75em'>{{$item->trainer->name }} </div>
+                    <div class='uhrzeit' style='font-size: 0.75em'>{{ $item->begins_at }} - {{ $item->ends_at }} </div>
+                    <div style='font-size: 0.75em'>{{ $item->alter }} </div>
 
+
+                </div>
+                @endforeach
                 </tr>
                 </tbody>
-            </table>
-        </div>
+                </table>
+            </div>
     </div>
+    @else
+        <p style="text-align: center; font-size: 3em">Kein Stundenplan vorhanden</p>
+    @endif
+
 </div>
 
-<?php echo view('foot'); ?>
+
+@include('foot')
 <style>
     .grid {
         background-color: #FFFFFF;
@@ -141,10 +156,12 @@
         padding-top: 0px;
         margin-top: 0px;
     }
-    @media (max-width: 768px){
+
+    @media (max-width: 768px) {
         .grid-item {
             min-width: 290px;
         }
+
         td {
             min-width: 310px;;
         }

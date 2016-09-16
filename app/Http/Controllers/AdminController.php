@@ -18,13 +18,13 @@ class AdminController extends Controller
         $this->middleware('auth');
     }
 
-    function stundenplanDashboard(){
+    function dashboard(){
         $date = date("Y-m-d");
         $user = Auth::user();
         $version = Version::where('valid_from','<', $date)->where('valid_until', '>', $date)->first();
         $stundenplan = Stundenplan::where('stundenplan_id', $version->id)->first();
         $kurscount = Stundenplan::where('stundenplan_id', $version->id)->count();
-        return view('admin.stundenplandashboard', ['version' => $version, 'user' => $user, 'stundenplan' => $stundenplan, 'kurscount' => $kurscount]);
+        return view('admin.dashboard', ['version' => $version, 'user' => $user, 'stundenplan' => $stundenplan, 'kurscount' => $kurscount]);
     }
 
 
