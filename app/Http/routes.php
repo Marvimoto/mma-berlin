@@ -19,7 +19,7 @@ Route::get('/', function () {
 Route::get('infos', 'ContentController@infos');
 Route::get('preise', 'ContentController@preise');
 Route::get('training', 'ContentController@training');
-Route::get('stundenplan', 'ContentController@stundenplan');
+Route::get('stundenplan/{id?}', ['as' => 'stundenplan', 'uses' => 'ContentController@stundenplan']);
 Route::get('team', 'ContentController@team');
 Route::get('impressum', 'ContentController@impressum');
 Route::get('logout', 'AdminController@logout');

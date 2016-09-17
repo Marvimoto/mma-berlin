@@ -1,34 +1,47 @@
 @include('head')
 <div class="row">
     @if (isset($stundenplan))
-    <button class="btn btn-link" id="filterButton" type="button" data-toggle="collapse" data-target="#collapseFilter"
-            aria-expanded="false" aria-controls="collapseFilter" style="font-size: 1.25em">
-        <span class="glyphicon glyphicon-chevron-down"></span> Filter
-    </button>
-    <div class="col-md-12 collapse" id="collapseFilter">
-        <div class="col-md-3">
-            <h4>Kurse anzeigen:</h4>
-            <div class="checkbox" id="radiokurse">
+        <button class="btn btn-link" id="filterButton" type="button" data-toggle="collapse"
+                data-target="#collapseFilter"
+                aria-expanded="false" aria-controls="collapseFilter" style="font-size: 1.25em">
+            <span class="glyphicon glyphicon-chevron-down"></span> Filter
+        </button>
+        <div class="col-md-12 collapse" id="collapseFilter">
+            <div class="col-md-3 clearfix">
+                <h4>Kurse anzeigen:</h4>
                 @foreach($kurse as $kurs)
                     <?php
                     $string = str_replace(' ', '', $kurs->name);
                     $string = preg_replace('/[^a-z0-9 ]/i', '', $string);
                     $string = strtolower($string);
                     ?>
-
-
-                    <label>
-                        <input class="kurse btn btn-sm" type="checkbox" value="{{ str_slug($kurs->name, '') }}" checked>
-                        {{ $kurs->name }}
-                    </label>
+                    <button class="kurse btn btn-success btn-sm"
+                            style="margin-top: 1px; margin-bottom: 1px; width: 100%"
+                            id="{{ str_slug($kurs->name, '') }}">{{ $kurs->name }}</button>
                 @endforeach
+                <button class="btn btn-sm btn-primary pull-left" id="allekurse" style="width: 45%">Alle</button>
+                <button class="btn btn-sm btn-primary pull-right" id="keinekurse" style="width:45%">Keine</button>
             </div>
-            <button class="btn btn-sm btn-primary" id="allekurse">Alle</button>
-            <button class="btn btn-sm btn-primary" id="keinekurse">Keine</button>
+            <div class="col-md-3">
+                <h4>Nächster Stundenplan:</h4>
+                @if (isset($nstundenplan))
+                    <?php $url = route('stundenplan', ['id' => $nstundenplan->id]); ?>
+                    <a href="{{ $url }}">{{ $nstundenplan->name}}</a><br>
+                    <p>Gültig ab dem {{ date("d.m.Y", strtotime($nstundenplan->valid_from)) }}</p>
+                @else
+                    <p>Kein Folgestundenplan vorhanden</p>
+                @endif
+            </div>
         </div>
-    </div>
 </div>
 <div class="row" style="margin-top: 10px">
+    @if (isset($nstundenplan))
+        @if (date("Y-m-d") <= date("Y-m-d", strtotime($nstundenplan->valid_from)))
+            <p style="font-size: 20px; padding-bottom: 10px; padding-top: 10px; padding-left: 10px; padding-right: 10px; border-radius: 10px"
+               class="bg-warning">Ab dem {{ date("d.m.Y", strtotime($nstundenplan->valid_from)) }} beginnt der <a
+                        href="{{ $url }}">{{ $nstundenplan->name}}</a></p>
+        @endif
+    @endif
     <div col="col-md-12">
         <div class="table-responsive">
             <table style="width: 100%" class="table table-bordered">
@@ -45,12 +58,12 @@
                 </thead>
                 <tbody>
                 <tr style="vertical-align: top">
-                <?php
+            <?php
             $day = 0;
             ?>
-                @foreach ($stundenplan as $item)
-                    @if ($item->tag_id > $day)
-                        @if ($day != 0)
+            @foreach ($stundenplan as $item)
+                @if ($item->tag_id > $day)
+                    @if ($day != 0)
         </div>
         </td>
         @endif
@@ -65,7 +78,7 @@
                 $string = preg_replace('/[^a-z0-9 ]/i', '', $string);
                 $string = strtolower($string);
                 $item->begins_at = date('H:i', strtotime($item->begins_at));
-                $item->ends_at = date('H:i', strtotime($item->ends_at)) ;
+                $item->ends_at = date('H:i', strtotime($item->ends_at));
                 ?>
                 <div data-kurzname="{{ $string }}" class='grid-item {{ $string }}'><h4
                             class='kursname'>{{$item->kurs->name }}</h4>
@@ -109,6 +122,7 @@
         padding-right: 10px;
         border: 10px;
         border-color: #000000;
+        border-radius: 5px;
     }
 
     label {
@@ -163,7 +177,7 @@
         }
 
         td {
-            min-width: 310px;;
+            min-width: 310px;
         }
     }
 
@@ -211,30 +225,42 @@
 
         });
         $('#allekurse').click(function () {
-            $("input.kurse:checkbox").each(function () {
-                $(this).prop('checked', true);
-            })
+            $(".kurse").each(function () {
+                $(this).addClass('btn-success');
+                $(this).removeClass('btn-danger');
+            });
             sortByArray();
         });
         $('#keinekurse').click(function () {
-            $("input.kurse:checkbox").each(function () {
-                $(this).prop('checked', false);
-            })
+            $(".kurse").each(function () {
+                $(this).removeClass('btn-success');
+                $(this).addClass('btn-danger');
+            });
             sortByArray();
         });
 
-        $('.kurse').change(function () {
+        $('.kurse').click(function () {
+            if ($(this).hasClass('btn-success')) {
+                $(this).removeClass('btn-success');
+                $(this).addClass('btn-danger');
+            }
+            else {
+                $(this).addClass('btn-success');
+                $(this).removeClass('btn-danger');
+            }
             sortByArray();
         });
     });
 
     function sortByArray() {
         var checkedarray = [];
-        $("input.kurse:checkbox").each(function () {
-            if ($(this).prop('checked') == true) {
-                checkedarray.push($(this).val());
+        $(".kurse").each(function () {
+            console.log($(this));
+            if ($(this).hasClass('btn-success') == true) {
+                checkedarray.push($(this).attr('id'));
             }
         });
+        console.log(checkedarray);
         $('.grid').isotope({
             filter: function () {
                 var kurzname = $(this).attr('data-kurzname');

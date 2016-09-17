@@ -41,23 +41,38 @@ class ContentController extends Controller
         return view('impressum');
     }
 
-    function stundenplan()
+    function stundenplan($id = null)
     {
         $kurse = Kurs::all();
         $trainer = Trainer::all();
         $raeume = Raum::all();
         $tage = Tag::all();
-        if ($version = Version::where('valid_from', '<', date('Y-m-d'))->where('valid_until', '>', date('Y-m-d'))->first()) {
-            $id = $version->id;
-            $version->valid_from = new DateTime($version->valid_from);
-            $version->valid_until = new DateTime($version->valid_until);
-            $version->valid_from = date("d.m.Y", $version->valid_from->getTimestamp());
-            $version->valid_until = date("d.m.Y", $version->valid_until->getTimestamp());
-            $stundenplan = Stundenplan::with('kurs', 'tag', 'raum', 'trainer')->where('stundenplan_id', $id)->get()->sortBy('tag');
-            return view('stundenplan', ['version' => $version, 'stundenplan' => $stundenplan, 'tage' => $tage, 'kurse' => $kurse, 'trainer' => $trainer, 'raeume' => $raeume]);
+        //Nächster Stundenplan nach dem Aktuellen
+        if ($id == null) {
+            $nstundenplan = Version::where('valid_from', '>', date('Y-m-d'))->orderBy('valid_from', 'desc')->first();
+            if ($version = Version::where('valid_from', '<', date('Y-m-d'))->where('valid_until', '>', date('Y-m-d'))->first()) {
+                $id = $version->id;
+                $version->valid_from = new DateTime($version->valid_from);
+                $version->valid_until = new DateTime($version->valid_until);
+                $version->valid_from = date("d.m.Y", $version->valid_from->getTimestamp());
+                $version->valid_until = date("d.m.Y", $version->valid_until->getTimestamp());
+                $stundenplan = Stundenplan::with('kurs', 'tag', 'raum', 'trainer')->where('stundenplan_id', $id)->get()->sortBy('tag');
+                return view('stundenplan', ['version' => $version, 'stundenplan' => $stundenplan, 'tage' => $tage, 'kurse' => $kurse, 'trainer' => $trainer, 'raeume' => $raeume, 'nstundenplan' => $nstundenplan]);
+            } else {
+                return view('stundenplan', ['version' => $version, 'stundenplan' => null, 'tage' => $tage, 'kurse' => $kurse, 'trainer' => $trainer, 'raeume' => $raeume, 'nstundenplan' => null]);
+            }
         }
         else {
-            return view('stundenplan', ['version' => $version, 'stundenplan' => null, 'tage' => $tage, 'kurse' => $kurse, 'trainer' => $trainer, 'raeume' => $raeume]);
+            if ($version = Version::where('id', '=', $id)->first()) {
+                $version->valid_from = new DateTime($version->valid_from);
+                $version->valid_until = new DateTime($version->valid_until);
+                $version->valid_from = date("d.m.Y", $version->valid_from->getTimestamp());
+                $version->valid_until = date("d.m.Y", $version->valid_until->getTimestamp());
+                $stundenplan = Stundenplan::with('kurs', 'tag', 'raum', 'trainer')->where('stundenplan_id', $id)->get()->sortBy('tag');
+                return view('stundenplan', ['version' => $version, 'stundenplan' => $stundenplan, 'tage' => $tage, 'kurse' => $kurse, 'trainer' => $trainer, 'raeume' => $raeume, 'nstundenplan' => null]);
+            } else {
+                return view('stundenplan', ['version' => $version, 'stundenplan' => null, 'tage' => $tage, 'kurse' => $kurse, 'trainer' => $trainer, 'raeume' => $raeume, 'nstundenplan' => null]);
+            }
         }
 
     }
