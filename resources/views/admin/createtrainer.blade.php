@@ -3,7 +3,7 @@ use Illuminate\Support\Facades\Input;
 echo view('admin/head'); ?>
 <div class="col-md-3"></div>
 <div class="col-md-6">
-    {{ Form::open(array('url' => 'admin/trainer')) }}
+    {{ Form::open(array('url' => 'admin/trainer', 'files' => true)) }}
 
     <div class="form-group">
         {{ Form::label('name', 'Name') }}
@@ -40,6 +40,10 @@ echo view('admin/head'); ?>
     <div class="form-group">
         {{ Form::label('links', 'Links') }}
         {{ Form::text('links', null, array('class' => 'form-control')) }}
+    </div>
+    <div class="form-group">
+        {{ Form::label('photo', 'Foto') }}
+        {{ Form::file('photo', array('class' => 'form-control')) }}
     </div>
 
     {{ Form::submit('Trainer erstellen', array('class' => 'btn btn-primary')) }}

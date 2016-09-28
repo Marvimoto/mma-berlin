@@ -7,13 +7,17 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'AlterKursplanTable' => $baseDir . '/database/migrations/2016_04_15_123109_alter_kursplan_table.php',
+    'AlterTableFighterAddPhoto' => $baseDir . '/database/migrations/2016_09_28_093400_alter_table_fighter_add_photo.php',
+    'AlterTurnierName' => $baseDir . '/database/migrations/2016_09_28_131959_alter_turnier_name.php',
     'CreateFighterTable' => $baseDir . '/database/migrations/2016_04_23_182825_create_fighter_table.php',
     'CreateGym' => $baseDir . '/database/migrations/2016_04_23_131838_create_gym.php',
+    'CreateKampfpaarung' => $baseDir . '/database/migrations/2016_09_28_134757_create_kampfpaarung.php',
     'CreatePasswordResetsTable' => $baseDir . '/database/migrations/2014_10_12_100000_create_password_resets_table.php',
     'CreateProbetrainingTable' => $baseDir . '/database/migrations/2016_09_17_095925_create_probetraining_table.php',
     'CreateRaumTable' => $baseDir . '/database/migrations/2016_04_15_122928_create_raum_table.php',
     'CreateStundenplan' => $baseDir . '/database/migrations/2014_10_12_000000_create_stundenplan.php',
     'CreateTagTable' => $baseDir . '/database/migrations/2016_04_15_131208_create_tag_table.php',
+    'CreateTurnier' => $baseDir . '/database/migrations/2016_09_28_130258_create_turnier.php',
     'CreateUsersTable' => $baseDir . '/database/migrations/2014_10_12_000000_create_users_table.php',
     'DatabaseSeeder' => $baseDir . '/database/seeds/DatabaseSeeder.php',
     'File_Iterator' => $vendorDir . '/phpunit/php-file-iterator/src/Iterator.php',

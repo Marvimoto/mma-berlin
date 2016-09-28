@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers ;
+namespace App\Http\Controllers;
 
 use App\User;
 use App\Http\Controllers\Controller;
@@ -8,6 +8,7 @@ use App\Trainer;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Input;
+use Intervention\Image\Facades\Image;
 use Illuminate\Http\Request;
 
 
@@ -42,10 +43,10 @@ class TrainerController extends Controller
      *
      * @return Response
      */
-    public function store()
+    public function store(Request $request)
     {
         $rules = array(
-            'name'       => 'required'
+            'name' => 'required'
         );
         $validator = Validator::make(Input::all(), $rules);
 
@@ -57,15 +58,36 @@ class TrainerController extends Controller
         } else {
             // store
             $trainer = new Trainer;
-            $trainer->name      = Input::get('name');
-            $trainer->teaches   = Input::get('teaches');
-            $trainer->career    = Input::get('career');
-            $trainer->job       = Input::get('job');
+            $trainer->name = Input::get('name');
+            $trainer->teaches = Input::get('teaches');
+            $trainer->career = Input::get('career');
+            $trainer->job = Input::get('job');
             $trainer->trainer_since = Input::get('trainer_since');
             $trainer->languages = Input::get('languages');
             $trainer->fav_technique = Input::get('fav_technique');
-            $trainer->misc      = Input::get('misc');
-            $trainer->links     = Input::get('links');
+            $trainer->misc = Input::get('misc');
+            $trainer->links = Input::get('links');
+            if ($request->file('photo')->isValid()) {
+                $destinationPath = public_path('images'); // upload path
+                $extension = $request->file('photo')->getClientOriginalExtension(); // getting image extension
+                $fileName = rand(11111, 99999) . '.' . $extension; // renaming image
+                $request->file('photo')->move($destinationPath, $fileName); // uploading file to given path
+                if ($trainer->photo != "") {
+                    unlink($destinationPath . "/" . $trainer->photo);
+                }
+                $trainer->photo = $fileName;
+                $image = Image::make(public_path('images/') . $fileName);
+                $height = $image->height();
+                $width = $image->width();
+                if ($height > $width) {
+                    $image->crop($width, $width);
+                }
+                else {
+                    $image->crop($height, $height);
+                }
+
+                $image->save(public_path('images/') . $fileName);
+            }
             $trainer->save();
 
             // redirect
@@ -76,7 +98,7 @@ class TrainerController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return Response
      */
     public function show($id)
@@ -87,7 +109,7 @@ class TrainerController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return Response
      */
     public function edit($id)
@@ -101,13 +123,13 @@ class TrainerController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return Response
      */
     public function update(Request $request, $id)
     {
         $rules = array(
-            'name'       => 'required',
+            'name' => 'required',
         );
         $validator = Validator::make(Input::all(), $rules);
 
@@ -119,21 +141,21 @@ class TrainerController extends Controller
         } else {
             // store
             $trainer = Trainer::find($id);
-            $trainer->name       = Input::get('name');
-            $trainer->teaches   = Input::get('teaches');
-            $trainer->career    = Input::get('career');
-            $trainer->job       = Input::get('job');
+            $trainer->name = Input::get('name');
+            $trainer->teaches = Input::get('teaches');
+            $trainer->career = Input::get('career');
+            $trainer->job = Input::get('job');
             $trainer->trainer_since = Input::get('trainer_since');
             $trainer->languages = Input::get('languages');
             $trainer->fav_technique = Input::get('fav_technique');
-            $trainer->misc      = Input::get('misc');
-            $trainer->links     = Input::get('links');
+            $trainer->misc = Input::get('misc');
+            $trainer->links = Input::get('links');
             if ($request->file('photo')->isValid()) {
                 $destinationPath = public_path('images'); // upload path
                 $extension = $request->file('photo')->getClientOriginalExtension(); // getting image extension
                 $fileName = rand(11111, 99999) . '.' . $extension; // renaming image
                 $request->file('photo')->move($destinationPath, $fileName); // uploading file to given path
-                if($trainer->photo != "") {
+                if ($trainer->photo != "") {
                     unlink($destinationPath . "/" . $trainer->photo);
                 }
                 $trainer->photo = $fileName;
@@ -148,7 +170,7 @@ class TrainerController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return Response
      */
     public function destroy($id)

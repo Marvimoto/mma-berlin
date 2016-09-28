@@ -13,7 +13,7 @@ echo view('admin/head'); ?>
         </div>
     @endif
 
-        {{ Form::open(array('url' => 'admin/fighters')) }}
+    {{ Form::open(array('url' => 'admin/fighters', 'files' => true)) }}
     <div class="form-group">
         {{ Form::label('vorname', 'Vorname') }}
         {{ Form::text('vorname', null, array('class' => 'form-control')) }}
@@ -25,6 +25,10 @@ echo view('admin/head'); ?>
     <div class="form-group">
         {{ Form::label('gym', 'Gym') }}<br>
         {{ Form::select('gym', $gyms, null, array('class' => 'form-control')) }}
+    </div>
+    <div class="form-group">
+        {{ Form::label('photo', 'Foto') }}
+        {{ Form::file('photo', array('class' => 'form-control')) }}
     </div>
     {{ Form::submit('Kämpfer erstellen', array('class' => 'btn btn-primary')) }}
 
