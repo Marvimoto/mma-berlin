@@ -34,6 +34,7 @@ use Illuminate\Support\Facades\Auth;
                         <li><a href="{{url('preise')}}">Preise</a></li>
                         <li><a href="{{url('training')}}">Training</a></li>
                         <li><a href="{{url('team')}}">Team</a></li>
+                        <li><a href="{{route('probetraining.create') }}">Probetraining</a></li>
                     </ul>
                 </li>
                 <li><a href="{{url('stundenplan')}}">Stundenplan</a></li>

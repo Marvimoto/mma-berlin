@@ -65,5 +65,8 @@ Route::group(['middleware' => 'web'], function () {
     Route::resource('admin/gyms', 'GymController');
     Route::resource('admin/fighters', 'FighterController');
 
+    //Probetraining
+    Route::resource('probetraining', 'ProbetrainingController');
+
 
 });

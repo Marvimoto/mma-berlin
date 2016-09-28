@@ -23,4 +23,8 @@ class Stundenplan extends Model
     public function trainer(){
         return $this->belongsTo('App\Trainer');
     }
+
+    public function probetraining(){
+        return $this->hasMany('App\Probetraining');
+    }
 }

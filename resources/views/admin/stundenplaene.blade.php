@@ -1,4 +1,4 @@
-<?php echo view('admin/head'); ?>
+@include('admin/head')
 <table class="table table-hover">
     <thead>
     <tr>
@@ -28,9 +28,9 @@
         $status = 2;
     }
     ?>
-    <td><?php echo $version->name; ?></td>
-    <td><?php echo $version->valid_from->format("d.m.Y"); ?></td>
-    <td><?php echo $version->valid_until->format("d.m.Y"); ?></td>
+    <td>{{ $version->name }}</td>
+    <td>{{ $version->valid_from->format("d.m.Y") }}</td>
+    <td>{{ $version->valid_until->format("d.m.Y") }}</td>
     <td><?php switch ($status) {
             case 0:
                 echo "Abgelaufen";
@@ -66,4 +66,4 @@
 </col-md-8>
 <col-md-2></col-md-2>
 
-<?php echo view('admin/foot'); ?>
+@include('admin/foot')

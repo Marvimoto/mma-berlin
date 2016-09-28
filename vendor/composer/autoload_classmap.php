@@ -10,6 +10,7 @@ return array(
     'CreateFighterTable' => $baseDir . '/database/migrations/2016_04_23_182825_create_fighter_table.php',
     'CreateGym' => $baseDir . '/database/migrations/2016_04_23_131838_create_gym.php',
     'CreatePasswordResetsTable' => $baseDir . '/database/migrations/2014_10_12_100000_create_password_resets_table.php',
+    'CreateProbetrainingTable' => $baseDir . '/database/migrations/2016_09_17_095925_create_probetraining_table.php',
     'CreateRaumTable' => $baseDir . '/database/migrations/2016_04_15_122928_create_raum_table.php',
     'CreateStundenplan' => $baseDir . '/database/migrations/2014_10_12_000000_create_stundenplan.php',
     'CreateTagTable' => $baseDir . '/database/migrations/2016_04_15_131208_create_tag_table.php',
